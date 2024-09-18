@@ -24,7 +24,11 @@ type Hilbert struct {
 }
 
 // NewHilbert returns a Hilbert space which maps integers to and from the curve.
-// n must be a power of two.
+// n must be a power of two. If verticalCompatible is true, the Hilbert curve
+// will be rotated 90 degrees and rotated around the Y-axis. In other words
+// instead of the Hilbert curve representing the shaper of the letter U, it will
+// look like a backwards letter C. This allows multiple square Hilbert curves to
+// be vertically stacked and maintain the Hilbert locality property.
 func NewHilbert(n int, verticalCompatible bool) (*Hilbert, error) {
 	if n <= 0 {
 		return nil, ErrNotPositive
