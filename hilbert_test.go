@@ -169,6 +169,58 @@ func TestMapInverse(t *testing.T) {
 	}
 }
 
+func TestHorizontallCompat(t *testing.T) {
+	order := 16
+	maxOffset := order*order - 1
+	s, err := NewHilbert(order, false)
+	if err != nil {
+		t.Fatalf("Failed to create hibert space: %s", err)
+	}
+
+	x, y, err := s.Map(maxOffset)
+	if err != nil {
+		t.Errorf("Map(%d) returned error: %s", maxOffset, err)
+	}
+
+	if x != order-1 || y != 0 {
+		t.Errorf("Map(%d) returned (x,y) = (%d,%d), want (%d, 0)", maxOffset, x, y, order-1)
+	}
+
+	x, y, err = s.Map(0)
+	if err != nil {
+		t.Errorf("Map(%d) returned error: %s", 0, err)
+	}
+	if x != 0 || y != 0 {
+		t.Errorf("Map(%d) returned (x,y) = (%d,%d), want (0, 0)", 0, x, y)
+	}
+}
+
+func TestVerticalCompat(t *testing.T) {
+	order := 16
+	maxOffset := order*order - 1
+	s, err := NewHilbert(order, true)
+	if err != nil {
+		t.Fatalf("Failed to create hibert space: %s", err)
+	}
+
+	x, y, err := s.Map(maxOffset)
+	if err != nil {
+		t.Errorf("Map(%d) returned error: %s", maxOffset, err)
+	}
+
+	if x != 0 || y != order-1 {
+		t.Errorf("Map(d) returned (x,y) = (%d,%d), want (0, %d)", x, y, order-1)
+	}
+
+	x, y, err = s.Map(0)
+	if err != nil {
+		t.Errorf("Map(%d) returned error: %s", 0, err)
+	}
+	if x != 0 || y != 0 {
+		t.Errorf("Map(%d) returned (x,y) = (%d,%d), want (0, 0)", 0, x, y)
+	}
+}
+
 func TestAllMapValues(t *testing.T) {
 	s, err := NewHilbert(16, false)
 	if err != nil {
