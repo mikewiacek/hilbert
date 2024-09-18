@@ -181,9 +181,16 @@ func TestHorizontallCompat(t *testing.T) {
 	if err != nil {
 		t.Errorf("Map(%d) returned error: %s", maxOffset, err)
 	}
-
 	if x != order-1 || y != 0 {
 		t.Errorf("Map(%d) returned (x,y) = (%d,%d), want (%d, 0)", maxOffset, x, y, order-1)
+	}
+
+	got, err := s.MapInverse(x, y)
+	if err != nil {
+		t.Errorf("MapInverse(%d, %d) errored: %v", x, y, err)
+	}
+	if got != maxOffset {
+		t.Errorf("MapInverse(%d, %d) got %d, want %d", x, y, got, maxOffset)
 	}
 
 	x, y, err = s.Map(0)
@@ -192,6 +199,13 @@ func TestHorizontallCompat(t *testing.T) {
 	}
 	if x != 0 || y != 0 {
 		t.Errorf("Map(%d) returned (x,y) = (%d,%d), want (0, 0)", 0, x, y)
+	}
+	got, err = s.MapInverse(x, y)
+	if err != nil {
+		t.Errorf("MapInverse(%d, %d) errored: %v", x, y, err)
+	}
+	if got != 0 {
+		t.Errorf("MapInverse(%d, %d) got %d, want %d", x, y, got, 0)
 	}
 }
 
@@ -207,9 +221,16 @@ func TestVerticalCompat(t *testing.T) {
 	if err != nil {
 		t.Errorf("Map(%d) returned error: %s", maxOffset, err)
 	}
-
 	if x != 0 || y != order-1 {
 		t.Errorf("Map(d) returned (x,y) = (%d,%d), want (0, %d)", x, y, order-1)
+	}
+
+	got, err := s.MapInverse(x, y)
+	if err != nil {
+		t.Errorf("MapInverse(%d, %d) errored: %v", x, y, err)
+	}
+	if got != maxOffset {
+		t.Errorf("MapInverse(%d, %d) got %d, want %d", x, y, got, maxOffset)
 	}
 
 	x, y, err = s.Map(0)
@@ -218,6 +239,13 @@ func TestVerticalCompat(t *testing.T) {
 	}
 	if x != 0 || y != 0 {
 		t.Errorf("Map(%d) returned (x,y) = (%d,%d), want (0, 0)", 0, x, y)
+	}
+	got, err = s.MapInverse(x, y)
+	if err != nil {
+		t.Errorf("MapInverse(%d, %d) errored: %v", x, y, err)
+	}
+	if got != 0 {
+		t.Errorf("MapInverse(%d, %d) got %d, want %d", x, y, got, 0)
 	}
 }
 
