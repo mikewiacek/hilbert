@@ -287,6 +287,18 @@ func BenchmarkMap(b *testing.B) {
 	}
 }
 
+func BenchmarkMapVertical(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s, err := NewHilbert(benchmarkN, true)
+		if err != nil {
+			b.Fatalf("Failed to create hibert space: %s", err)
+		}
+		for d := 0; d < benchmarkN*benchmarkN; d++ {
+			s.Map(d)
+		}
+	}
+}
+
 func BenchmarkMapRandom(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		s, err := NewHilbert(benchmarkN, false)
@@ -300,9 +312,36 @@ func BenchmarkMapRandom(b *testing.B) {
 	}
 }
 
+func BenchmarkMapRandomVertical(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s, err := NewHilbert(benchmarkN, true)
+		if err != nil {
+			b.Fatalf("Failed to create hibert space: %s", err)
+		}
+		for d := 0; d < benchmarkN*benchmarkN; d++ {
+			rd := rand.Intn(benchmarkN * benchmarkN) // Pick a random d
+			s.Map(rd)
+		}
+	}
+}
+
 func BenchmarkMapInverse(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		s, err := NewHilbert(benchmarkN, false)
+		if err != nil {
+			b.Fatalf("Failed to create hibert space: %s", err)
+		}
+
+		for x := 0; x < benchmarkN; x++ {
+			for y := 0; y < benchmarkN; y++ {
+				s.MapInverse(x, y)
+			}
+		}
+	}
+}
+func BenchmarkMapInverseVertical(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s, err := NewHilbert(benchmarkN, true)
 		if err != nil {
 			b.Fatalf("Failed to create hibert space: %s", err)
 		}
