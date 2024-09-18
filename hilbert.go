@@ -36,7 +36,8 @@ func NewHilbert(n int, verticalCompatible bool) (*Hilbert, error) {
 	}
 
 	return &Hilbert{
-		N: n,
+		N:                  n,
+		verticalCompatible: verticalCompatible,
 	}, nil
 }
 
