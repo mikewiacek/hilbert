@@ -19,12 +19,13 @@ package hilbert
 // Hilbert represents a 2D Hilbert space of order N for mapping to and from.
 // Implements SpaceFilling interface.
 type Hilbert struct {
-	N int
+	N                  int
+	verticalCompatible bool
 }
 
 // NewHilbert returns a Hilbert space which maps integers to and from the curve.
 // n must be a power of two.
-func NewHilbert(n int) (*Hilbert, error) {
+func NewHilbert(n int, verticalCompatible bool) (*Hilbert, error) {
 	if n <= 0 {
 		return nil, ErrNotPositive
 	}
@@ -70,6 +71,14 @@ func (s *Hilbert) Map(t int) (x, y int, err error) {
 		t /= 4
 	}
 
+	if s.verticalCompatible {
+		// Rotate 90 degrees counter clockwise: swap x and y, then adjust y to match rotation.
+		x, y = y, s.N-1-x
+
+		// Reflect around the X-axis: flip y.
+		y = s.N - 1 - y
+	}
+
 	return
 }
 
@@ -77,6 +86,14 @@ func (s *Hilbert) Map(t int) (x, y int, err error) {
 func (s *Hilbert) MapInverse(x, y int) (t int, err error) {
 	if x < 0 || x >= s.N || y < 0 || y >= s.N {
 		return -1, ErrOutOfRange
+	}
+
+	if s.verticalCompatible {
+		// Reverse the X-axis reflection.
+		y = s.N - 1 - y
+
+		// Reverse the 90-degree counter-clockwise rotation.
+		x, y = s.N-1-y, x
 	}
 
 	for i := s.N / 2; i > 0; i = i / 2 {
